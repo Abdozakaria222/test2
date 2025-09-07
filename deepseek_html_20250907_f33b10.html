@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فك التشفير الحقيقي - أدوات تعليمية</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: var(--light-color);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+        
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .tab.active {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .tab:hover:not(.active) {
+            background: rgba(52, 152, 219, 0.3);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        textarea, input[type="text"], select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--secondary-color);
+            border-radius: 5px;
+            color: var(--light-color);
+            font-size: 16px;
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: monospace;
+        }
+        
+        .btn {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto;
+            width: 200px;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .result {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 5px solid var(--secondary-color);
+        }
+        
+        .result h3 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+        
+        .decrypted-text {
+            font-size: 18px;
+            word-break: break-all;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 5px;
+            min-height: 50px;
+            font-family: monospace;
+        }
+        
+        .algorithm-info {
+            background: rgba(52, 152, 219, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid var(--secondary-color);
+        }
+        
+        .warning {
+            background: rgba(231, 76, 60, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid var(--accent-color);
+        }
+        
+        .success {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        .failure {
+            color: var(--accent-color);
+        }
+        
+        .code-example {
+            background: #2d3748;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: monospace;
+        }
+        
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #ddd;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>فك التشفير الحقيقي - أدوات تعليمية</h1>
+        <p class="description">
+            هذه الأداة تتيح لك تجربة فك تشفير حقيقي باستخدام خوارزميات مختلفة. اختر الخوارزمية المناسبة وجرب بنفسك.
+        </p>
+    </header>
+    
+    <div class="container">
+        <div class="warning">
+            <strong>ملاحظة:</strong> هذه الأداة للأغراض التعليمية فقط. يهدف هذا المحتوى إلى تعلم أساسيات التشفير وفكه.
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('base64')">Base64</div>
+            <div class="tab" onclick="switchTab('xor')">XOR</div>
+            <div class="tab" onclick="switchTab('aes')">AES</div>
+            <div class="tab" onclick="switchTab('caesar')">شيفرة قيصر</div>
+        </div>
+        
+        <div id="base64" class="tab-content active">
+            <div class="algorithm-info">
+                <h3>فك تشفير Base64</h3>
+                <p>Base64 هو نظام ترميح (encoding) وليس تشفيراً (encryption) حقيقياً، ولكنه يستخدم بشكل شائع في العديد من التطبيقات.</p>
+                <div class="code-example">
+                    // دالة فك ترميح Base64 في JavaScript<br>
+                    function decodeBase64(str) {<br>
+                    &nbsp;&nbsp;return atob(str);<br>
+                    }
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="base64Input">النص المشفر (Base64):</label>
+                <textarea id="base64Input">SGVsbG8g8J2QniDwn5GN8J+NgCDYp9mE2LnYp9iv!</textarea>
+            </div>
+            
+            <button class="btn" onclick="decodeBase64()">فك التشفير</button>
+            
+            <div class="result">
+                <h3>النص بعد فك التشفير:</h3>
+                <div id="base64Result" class="decrypted-text">ستظهر النتيجة هنا...</div>
+            </div>
+        </div>
+        
+        <div id="xor" class="tab-content">
+            <div class="algorithm-info">
+                <h3>فك تشفير XOR</h3>
+                <p>XOR هو عملية ثنائية بسيطة تستخدم في التشفير. تتطلب معرفة المفتاح الصحيح لفك التشفير.</p>
+                <div class="code-example">
+                    // دالة فك تشفير XOR في JavaScript<br>
+                    function decryptXOR(str, key) {<br>
+                    &nbsp;&nbsp;let result = '';<br>
+                    &nbsp;&nbsp;for (let i = 0; i < str.length; i++) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;return result;<br>
+                    }
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="xorInput">النص المشفر:</label>
+                <textarea id="xorInput">񝠁񝡁񝢂񝢇񝡅񝠂񝡂񝢃񝢈񝡆񝠃񝡃񝢄񝢉񝡇񝠄񝡄񝢅񝢊񝡈</textarea>
+            </div>
+            
+            <div class="input-group">
+                <label for="xorKey">المفتاح:</label>
+                <input type="text" id="xorKey" value="secretkey">
+            </div>
+            
+            <button class="btn" onclick="decryptXOR()">فك التشفير</button>
+            
+            <div class="result">
+                <h3>النص بعد فك التشفير:</h3>
+                <div id="xorResult" class="decrypted-text">ستظهر النتيجة هنا...</div>
+            </div>
+        </div>
+        
+        <div id="aes" class="tab-content">
+            <div class="algorithm-info">
+                <h3>فك تشفير AES</h3>
+                <p>AES (معيار التشفير المتقدم) هو معيار تشفير قوي يستخدم على نطاق واسع.</p>
+                <div class="code-example">
+                    // استخدام مكتبة CryptoJS لفك تشفير AES<br>
+                    function decryptAES(encrypted, key) {<br>
+                    &nbsp;&nbsp;const bytes = CryptoJS.AES.decrypt(encrypted, key);<br>
+                    &nbsp;&nbsp;return bytes.toString(CryptoJS.enc.Utf8);<br>
+                    }
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="aesInput">النص المشفر (AES):</label>
+                <textarea id="aesInput">U2FsdGVkX19z5I6g5M2n0tNlLAVYtQv+0jVp5J5Z5aY=</textarea>
+            </div>
+            
+            <div class="input-group">
+                <label for="aesKey">المفتاح:</label>
+                <input type="text" id="aesKey" value="mySecretKey123">
+            </div>
+            
+            <button class="btn" onclick="decryptAES()">فك التشفير</button>
+            
+            <div class="result">
+                <h3>النص بعد فك التشفير:</h3>
+                <div id="aesResult" class="decrypted-text">ستظهر النتيجة هنا...</div>
+            </div>
+        </div>
+        
+        <div id="caesar" class="tab-content">
+            <div class="algorithm-info">
+                <h3>فك تشفير شيفرة قيصر</h3>
+                <p>شيفرة قيصر هي واحدة من أقدم تقنيات التشفير، حيث يتم إزاحة الحروف بعدد معين من المواضع.</p>
+                <div class="code-example">
+                    // دالة فك تشفير شيفرة قيصر في JavaScript<br>
+                    function decryptCaesar(str, shift) {<br>
+                    &nbsp;&nbsp;return str.replace(/[a-z]/gi, c => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;const base = c < 'a' ? 65 : 97;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;return String.fromCharCode((c.charCodeAt(0) - base - shift + 26) % 26 + base);<br>
+                    &nbsp;&nbsp;});<br>
+                    }
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="caesarInput">النص المشفر (شيفرة قيصر):</label>
+                <textarea id="caesarInput">Khoor Zruog! Ehvwl pdwv!</textarea>
+            </div>
+            
+            <div class="input-group">
+                <label for="caesarShift">مقدار الإزاحة:</label>
+                <input type="text" id="caesarShift" value="3">
+            </div>
+            
+            <button class="btn" onclick="decryptCaesar()">فك التشفير</button>
+            
+            <div class="result">
+                <h3>النص بعد فك التشفير:</h3>
+                <div id="caesarResult" class="decrypted-text">ستظهر النتيجة هنا...</div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2023 أدوات فك التشفير التعليمية - لتعلم أساسيات التشفير</p>
+    </footer>
+
+    <!-- تضمين مكتبة CryptoJS لخوارزمية AES -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+    <script>
+        // تبديل التبويبات
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`.tab:nth-child(${getTabIndex(tabName)})`).classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+        
+        function getTabIndex(tabName) {
+            const tabs = ['base64', 'xor', 'aes', 'caesar'];
+            return tabs.indexOf(tabName) + 1;
+        }
+        
+        // فك ترميح Base64
+        function decodeBase64() {
+            const input = document.getElementById('base64Input').value;
+            try {
+                // استبدال الأحغير غير القياسية في Base64
+                const standardBase64 = input.replace(/[^A-Za-z0-9+/=]/g, '');
+                const decoded = atob(standardBase64);
+                document.getElementById('base64Result').textContent = decoded;
+                document.getElementById('base64Result').className = 'decrypted-text success';
+            } catch (e) {
+                document.getElementById('base64Result').textContent = 'خطأ: النص المدخل غير صحيح';
+                document.getElementById('base64Result').className = 'decrypted-text failure';
+            }
+        }
+        
+        // فك تشفير XOR
+        function decryptXOR() {
+            const input = document.getElementById('xorInput').value;
+            const key = document.getElementById('xorKey').value;
+            
+            if (!key) {
+                document.getElementById('xorResult').textContent = 'خطأ: يلزم إدخال مفتاح';
+                document.getElementById('xorResult').className = 'decrypted-text failure';
+                return;
+            }
+            
+            let result = '';
+            for (let i = 0; i < input.length; i++) {
+                result += String.fromCharCode(input.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            }
+            
+            document.getElementById('xorResult').textContent = result;
+            document.getElementById('xorResult').className = 'decrypted-text success';
+        }
+        
+        // فك تشفير AES
+        function decryptAES() {
+            const input = document.getElementById('aesInput').value;
+            const key = document.getElementById('aesKey').value;
+            
+            if (!key) {
+                document.getElementById('aesResult').textContent = 'خطأ: يلزم إدخال مفتاح';
+                document.getElementById('aesResult').className = 'decrypted-text failure';
+                return;
+            }
+            
+            try {
+                const bytes = CryptoJS.AES.decrypt(input, key);
+                const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+                
+                if (decrypted) {
+                    document.getElementById('aesResult').textContent = decrypted;
+                    document.getElementById('aesResult').className = 'decrypted-text success';
+                } else {
+                    document.getElementById('aesResult').textContent = 'خطأ: فك التشفير فشل - المفتاح غير صحيح';
+                    document.getElementById('aesResult').className = 'decrypted-text failure';
+                }
+            } catch (e) {
+                document.getElementById('aesResult').textContent = 'خطأ: فك التشفير فشل';
+                document.getElementById('aesResult').className = 'decrypted-text failure';
+            }
+        }
+        
+        // فك تشفير شيفرة قيصر
+        function decryptCaesar() {
+            const input = document.getElementById('caesarInput').value;
+            const shift = parseInt(document.getElementById('caesarShift').value) || 0;
+            
+            let result = '';
+            for (let i = 0; i < input.length; i++) {
+                let c = input.charCodeAt(i);
+                
+                if (c >= 65 && c <= 90) { // حروف كبيرة
+                    result += String.fromCharCode((c - 65 - shift + 26) % 26 + 65);
+                } else if (c >= 97 && c <= 122) { // حروف صغيرة
+                    result += String.fromCharCode((c - 97 - shift + 26) % 26 + 97);
+                } else {
+                    result += input.charAt(i);
+                }
+            }
+            
+            document.getElementById('caesarResult').textContent = result;
+            document.getElementById('caesarResult').className = 'decrypted-text success';
+        }
+        
+        // تهيئة بعض الأمثلة عند تحميل الصفحة
+        window.onload = function() {
+            decodeBase64();
+            decryptXOR();
+            decryptCaesar();
+        };
+    </script>
+</body>
+</html>
